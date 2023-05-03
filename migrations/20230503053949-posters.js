@@ -35,7 +35,7 @@ exports.up = function(db) {
     },
     'description':'text',
     'date':{
-      type: "date",
+      type: "int",
       notNull: true
     },
     'stock':{
