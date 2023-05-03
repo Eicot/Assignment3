@@ -12,6 +12,7 @@
             <th>Available Quantity</th>
             <th>Height(cm)</th>
             <th>Width(cm)</th>
+            <th></th>
         </tr>
 
     </thead>
@@ -42,6 +43,10 @@
                 <td>
                     {{this.width}}
                 </td>
+                <td>
+                <a href="/posters/{{this.id}}/update" class="btn btn-primary btn-sm">Update</a>
+                <a href="/posters/{{this.id}}/delete" class="btn btn-danger btn-sm">Delete</a>
+            </td>
             </tr>
         {{/each}}
     </tbody>
