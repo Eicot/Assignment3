@@ -2,14 +2,14 @@ const express = require("express");
 const router = express.Router();
 
 // #1 import in the Poster model
-const {Poster, MediaProperty} = require('../models')
+const {Poster, MediaProperty, Tag} = require('../models')
 // import in the Forms
 const { bootstrapField, createPosterForm } = require('../forms');
 
 router.get('/', async (req,res)=>{
     // #2 - fetch all the posters (ie, SELECT * from posters)
     let posters = await Poster.collection().fetch({
-        withRelated:['mediaproperty']
+        withRelated:['mediaproperty', 'tags']
     }
     );
     res.render('posters/index', {
@@ -23,7 +23,11 @@ router.get('/create', async (req, res) => {
         return [mediaproperty.get("id"), mediaproperty.get('name')]
     })
 
-    const posterForm = createPosterForm(allMediaProperties);
+    const allTags = await Tag.fetchAll().map( tag => {
+        return [tag.get("id"), tag.get("name")];
+    })
+
+    const posterForm = createPosterForm(allMediaProperties, allTags);
     res.render('posters/create',{
         'form': posterForm.toHTML(bootstrapField)
     })
@@ -35,7 +39,11 @@ router.post('/create', async(req,res)=>{
         return [mediaproperty.get("id"), mediaproperty.get('name')]
     })
 
-    const posterForm = createPosterForm(allMediaProperties);
+    const allTags = await Tag.fetchAll().map( tag => {
+        return [tag.get("id"), tag.get("name")];
+    })
+
+    const posterForm = createPosterForm(allMediaProperties, allTags);
     posterForm.handle(req, {
         'success': async (form) => {
             const poster = new Poster();
@@ -48,9 +56,17 @@ router.post('/create', async(req,res)=>{
             poster.set('width', form.data.width);
             poster.set('mediaproperty_id', form.data.mediaproperty_id)
             await poster.save();
+
+            if (form.data.tags) {
+                const tagArray = form.data.tags.split(',');
+                await poster.tags().attach(tagArray);
+            }
+
             res.redirect('/posters');
         },
         'error': async (form) => {
+
+            console.log(form.data);
             res.render('posters/create', {
                 'form': form.toHTML(bootstrapField)
             })
@@ -65,14 +81,19 @@ router.get('/:poster_id/update', async (req, res) => {
     const poster = await Poster.where({
         'id': posterId
     }).fetch({
-        require: true
+        require: true,
+        withRelated: ['tags']
     });
 
     const allMediaProperties = await MediaProperty.fetchAll().map((mediaproperty) => {
         return [mediaproperty.get("id"), mediaproperty.get('name')]
     })
 
-    const posterForm = createPosterForm(allMediaProperties);
+    const allTags = await Tag.fetchAll().map( tag => {
+        return [tag.get("id"), tag.get("name")];
+    })
+
+    const posterForm = createPosterForm(allMediaProperties, allTags);
 
     // fill in the existing values
     posterForm.fields.title.value = poster.get('title');
@@ -83,6 +104,10 @@ router.get('/:poster_id/update', async (req, res) => {
     posterForm.fields.height.value = poster.get('height');
     posterForm.fields.width.value = poster.get('width');
     posterForm.fields.mediaproperty_id.value = poster.get('mediaproperty_id');
+
+    let selectedTags = await poster.related('tags').pluck('id')
+
+    posterForm.fields.tags.value = selectedTags;
 
     res.render('posters/update', {
         'form': posterForm.toHTML(bootstrapField),
@@ -96,7 +121,8 @@ router.post('/:poster_id/update', async (req, res) => {
     const poster = await Poster.where({
         'id': req.params.poster_id
     }).fetch({
-        require: true
+        require: true,
+        withRelated: ['tags']
     });
 
     const allMediaProperties = await MediaProperty.fetchAll().map((mediaproperty) => {
@@ -107,8 +133,19 @@ router.post('/:poster_id/update', async (req, res) => {
     const posterForm = createPosterForm(allMediaProperties);
     posterForm.handle(req, {
         'success':async(form) => {
-            poster.set(form.data);
+            const {tags, ...posterData} = form.data;
+            poster.set(posterData);
             poster.save();
+
+            let tagIds = tags.split(',')
+            let existingTagIDs = await poster.related('tags').pluck('id');
+
+            let toRemove = existingTagIDs.filter( id => tagIds.includes(id) === false);
+
+            await poster.tags().detach(toRemove);
+
+            await poster.tags().attach(tagIds);
+
             res.redirect('/posters');
         },
         'error':async (form) => {
