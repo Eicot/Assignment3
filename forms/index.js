@@ -3,6 +3,7 @@ const forms = require("forms");
 // create some shortcuts
 const fields = forms.fields;
 const validators = forms.validators;
+const widgets = forms.widgets;
 
 var bootstrapField = function (name, object) {
     if (!Array.isArray(object.widget.classes)) { object.widget.classes = []; }
@@ -24,7 +25,7 @@ var bootstrapField = function (name, object) {
     return '<div class="form-group">' + label + widget + error + '</div>';
 };
 
-const createPosterForm = () => {
+const createPosterForm = (allMediaProperties=[]) => {
     return forms.create({
         'title': fields.string({
             required: true,
@@ -79,6 +80,16 @@ const createPosterForm = () => {
             },
             'validators':[validators.integer()]
         }),
+        'mediaproperty_id': fields.string({
+            label: 'Media',
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            },
+            widget: widgets.select(),
+            choices: allMediaProperties
+        })
     })
 };
 module.exports = { createPosterForm, bootstrapField };
