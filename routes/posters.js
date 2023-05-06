@@ -62,6 +62,8 @@ router.post('/create', async(req,res)=>{
                 await poster.tags().attach(tagArray);
             }
 
+            req.flash("success_messages", `New Poster ${poster.get('name')} has been created`)
+
             res.redirect('/posters');
         },
         'error': async (form) => {
@@ -134,7 +136,7 @@ router.post('/:poster_id/update', async (req, res) => {
     posterForm.handle(req, {
         'success':async(form) => {
             const {tags, ...posterData} = form.data;
-            poster.set(posßterData);
+            poster.set(posterData);
             poster.save();
 
             let tagIds = tags.split(',')
@@ -145,6 +147,8 @@ router.post('/:poster_id/update', async (req, res) => {
             await poster.tags().detach(toRemove);
 
             await poster.tags().attach(tagIds);
+
+            req.flash("success_messages", `The Poster ${poster.get('title')} has been updated`)
 
             res.redirect('/posters');
         },
