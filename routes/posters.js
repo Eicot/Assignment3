@@ -134,7 +134,7 @@ router.post('/:poster_id/update', async (req, res) => {
     posterForm.handle(req, {
         'success':async(form) => {
             const {tags, ...posterData} = form.data;
-            poster.set(posterData);
+            poster.set(posßterData);
             poster.save();
 
             let tagIds = tags.split(',')
