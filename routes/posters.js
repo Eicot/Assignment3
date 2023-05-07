@@ -6,7 +6,10 @@ const {Poster, MediaProperty, Tag} = require('../models')
 // import in the Forms
 const { bootstrapField, createPosterForm } = require('../forms');
 
-router.get('/', async (req,res)=>{
+// import in the CheckIfAuthenticated middleware
+const { checkIfAuthenticated } = require('../middlewares');
+
+router.get('/', checkIfAuthenticated, async (req,res)=>{
     // #2 - fetch all the posters (ie, SELECT * from posters)
     let posters = await Poster.collection().fetch({
         withRelated:['mediaproperty', 'tags']
@@ -17,7 +20,7 @@ router.get('/', async (req,res)=>{
     })
 })
 
-router.get('/create', async (req, res) => {
+router.get('/create', checkIfAuthenticated, async (req, res) => {
 
     const allMediaProperties = await MediaProperty.fetchAll().map((mediaproperty) => {
         return [mediaproperty.get("id"), mediaproperty.get('name')]
@@ -33,7 +36,7 @@ router.get('/create', async (req, res) => {
     })
 })
 
-router.post('/create', async(req,res)=>{
+router.post('/create', checkIfAuthenticated, async(req,res)=>{
 
     const allMediaProperties = await MediaProperty.fetchAll().map((mediaproperty) => {
         return [mediaproperty.get("id"), mediaproperty.get('name')]

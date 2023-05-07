@@ -43,13 +43,21 @@ app.use(function (req, res, next) {
     next();
 });
 
+// Share the user data with hbs files
+app.use(function(req,res,next){
+  res.locals.user = req.session.user;
+  next();
+})
+
 //import in the landing routes
 const landingRoutes = require('./routes/landing')
 const posterRoutes = require('./routes/posters')
+const userRoutes = require('./routes/users')
 
 async function main() {
     app.use('/', landingRoutes);
-    app.use('/posters', posterRoutes)
+    app.use('/posters', posterRoutes);
+    app.use('/users', userRoutes)
   
 }
 
