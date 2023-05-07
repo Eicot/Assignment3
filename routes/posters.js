@@ -32,7 +32,10 @@ router.get('/create', checkIfAuthenticated, async (req, res) => {
 
     const posterForm = createPosterForm(allMediaProperties, allTags);
     res.render('posters/create',{
-        'form': posterForm.toHTML(bootstrapField)
+        'form': posterForm.toHTML(bootstrapField),
+        cloudinaryName: process.env.CLOUDINARY_NAME,
+        cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+        cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
     })
 })
 
@@ -73,7 +76,10 @@ router.post('/create', checkIfAuthenticated, async(req,res)=>{
 
             console.log(form.data);
             res.render('posters/create', {
-                'form': form.toHTML(bootstrapField)
+                'form': form.toHTML(bootstrapField),
+                cloudinaryName: process.env.CLOUDINARY_NAME,
+                cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+                cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
             })
         }
 

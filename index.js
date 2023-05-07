@@ -4,8 +4,10 @@ const wax = require("wax-on");
 const session = require('express-session');
 const flash = require('connect-flash');
 const FileStore = require('session-file-store')(session);
-require("dotenv").config();
 const csrf = require('csurf');
+
+
+require("dotenv").config();
 
 // create an instance of express app
 let app = express();
@@ -71,11 +73,13 @@ app.use(function(req,res,next){
 const landingRoutes = require('./routes/landing')
 const posterRoutes = require('./routes/posters')
 const userRoutes = require('./routes/users')
+const cloudinaryRoutes = require('./routes/cloudinary.js')
 
 async function main() {
     app.use('/', landingRoutes);
     app.use('/posters', posterRoutes);
-    app.use('/users', userRoutes)
+    app.use('/users', userRoutes);
+    app.use('/cloudinary', cloudinaryRoutes);
   
 }
 
