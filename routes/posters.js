@@ -61,6 +61,7 @@ router.post('/create', checkIfAuthenticated, async(req,res)=>{
             poster.set('height', form.data.height);
             poster.set('width', form.data.width);
             poster.set('mediaproperty_id', form.data.mediaproperty_id)
+            poster.set('image_url', form.data.image_url);
             await poster.save();
 
             if (form.data.tags) {
@@ -115,6 +116,8 @@ router.get('/:poster_id/update', async (req, res) => {
     posterForm.fields.height.value = poster.get('height');
     posterForm.fields.width.value = poster.get('width');
     posterForm.fields.mediaproperty_id.value = poster.get('mediaproperty_id');
+    // set the image url in the product form
+    posterForm.fields.image_url.value = poster.get('image_url');
 
     let selectedTags = await poster.related('tags').pluck('id')
 
@@ -122,7 +125,10 @@ router.get('/:poster_id/update', async (req, res) => {
 
     res.render('posters/update', {
         'form': posterForm.toHTML(bootstrapField),
-        'poster': poster.toJSON()
+        'poster': poster.toJSON(),
+        cloudinaryName: process.env.CLOUDINARY_NAME,
+        cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+        cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
     })
 
 })
