@@ -1,9 +1,9 @@
 {
     "dev": {
-      "driver": "mysql",
-      "user": "sqluser",
-      "password":"Password1@",
-      "database":"shop",
-      "host":"127.0.0.1"
+      "driver": "DB_DRIVER",
+      "user": "DB_USER",
+      "password":"DB_PASSWORD",
+      "database":"DB_DATABASE",
+      "host":"DB_HOST"
     }
   }
