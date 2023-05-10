@@ -4,20 +4,91 @@ const router = express.Router();
 // #1 import in the Poster model
 const {Poster, MediaProperty, Tag} = require('../models')
 // import in the Forms
-const { bootstrapField, createPosterForm } = require('../forms');
+const { bootstrapField, createPosterForm, createSearchForm } = require('../forms');
 
 // import in the CheckIfAuthenticated middleware
 const { checkIfAuthenticated } = require('../middlewares');
 
 router.get('/', checkIfAuthenticated, async (req,res)=>{
-    // #2 - fetch all the posters (ie, SELECT * from posters)
-    let posters = await Poster.collection().fetch({
-        withRelated:['mediaproperty', 'tags']
-    }
-    );
-    res.render('posters/index', {
-        'posters': posters.toJSON() // #3 - convert collection to JSON
+    // get all the mediaproperty
+   
+    const allMediaProperties = await MediaProperty.fetchAll().map((mediaproperty) => {
+        return [mediaproperty.get("id"), mediaproperty.get('name')]
     })
+    allMediaProperties.unshift([0, 'Any Media Property']);
+
+
+    // Get all the tags
+    const allTags = await Tag.fetchAll().map( tag => {
+        return [tag.get("id"), tag.get("name")];
+    })
+    allTags.unshift(['', 'Any Tag']);
+
+   // Create search form 
+    let searchForm = createSearchForm(allMediaProperties, allTags);
+    let q = Poster.collection();
+
+    searchForm.handle(req, {
+        'empty': async (form) => {
+            let posters = await q.fetch({
+                withRelated: ['tags']
+            })
+            res.render('posters/index', {
+                'posters': posters.toJSON(), 
+                'searchForm': form.toHTML(bootstrapField)
+            })
+                   },
+        'error': async (form) => {
+            let posters = await q.fetch({
+                withRelated: ['tags']
+            })
+            res.render('posters/index', {
+                'posters': posters.toJSON(), 
+                'searchForm': form.toHTML(bootstrapField)
+            })
+                    },
+        'success': async (form) => {
+            if (form.data.title) {
+                q.where('title', 'like', '%' +form.data.title + '%')
+           }
+
+           if (form.data.mediaproperty_id && form.data.mediaproperty_id != "0"
+) {
+                q.where('mediaproperty_id', '=', form.data.mediaproperty_id)
+           }
+
+           if (form.data.min_cost) {
+                q.where('cost', '>=', form.data.min_cost)
+           }
+
+           if (form.data.max_cost) {
+               q = q.where('cost', '<=', form.data.max_cost);
+           }
+
+            if (form.data.tags) {
+               q.query('join', 'posters_tags', 'posters.id', 'poster_id')
+               .where('tag_id', 'in', form.data.tags.split(','))
+           }
+           let posters = await q.fetch({
+            withRelated: ['tags']
+        })
+        res.render('posters/index', {
+            'posters': posters.toJSON(), 
+            'searchForm': form.toHTML(bootstrapField)
+        })
+           
+        }
+    })
+
+    // #2 - fetch all the posters (ie, SELECT * from posters)
+    // let posters = await Poster.collection().fetch({
+    //     withRelated:['mediaproperty', 'tags']
+    // }
+    // );
+    // res.render('posters/index', {
+    //     'posters': posters.toJSON(), // #3 - convert collection to JSON
+    //     'searchForm': searchForm.toHTML(bootstrapField)
+    // })
 })
 
 router.get('/create', checkIfAuthenticated, async (req, res) => {

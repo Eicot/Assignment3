@@ -158,4 +158,37 @@ const createLoginForm = () => {
     })
 };
 
-module.exports = { createPosterForm, createRegistrationForm, createLoginForm, bootstrapField };
+const createSearchForm = (allMediaProperties=[], allTags=[]) => {
+    return forms.create({
+        'title': fields.string({
+            required: false,
+        }),
+        'min_cost': fields.number({
+            required: false,
+            'validators':[validators.integer()]
+        }),
+        'max_cost': fields.number({
+            required: false,
+            // widget: widgets.select(),
+            // choices: ['100', '200'],
+            'validators':[validators.integer()]
+        }),
+        'mediaproperty_id': fields.string({
+            label: 'Media',
+            required: false,
+            widget: widgets.select(),
+            choices: allMediaProperties
+        }),
+        'tags': fields.string({
+            required: false,
+            errorAfterField: true,
+            widget: widgets.multipleSelect(),
+            choices: allTags
+        }),
+    
+    })
+}; 
+
+
+
+module.exports = { createPosterForm, createRegistrationForm, createLoginForm, createSearchForm, bootstrapField};
