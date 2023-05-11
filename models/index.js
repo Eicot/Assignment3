@@ -26,9 +26,20 @@ const Tag = bookshelf.model('Tag', {
 })
 
 const User = bookshelf.model('User',{
-    tableName: 'users'
+    tableName: 'users',
+    cart_items() {
+        return this.hasMany('CartItem');
+    }
+})
+
+const CartItem = bookshelf.model('CartItem', {
+    tableName: 'cart_items',
+    poster() {
+        return this.belongsTo('Poster')
+    }
+
 })
 
 module.exports = {
-    Poster, MediaProperty, Tag, User
+    Poster, MediaProperty, Tag, User, CartItem
 } 
