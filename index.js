@@ -53,7 +53,19 @@ app.use(function(req,res,next){
 })
 
 // enable CSRF
-app.use(csrf());
+// app.use(csrf());
+// note: replaced app.use(csrf()) with the following:
+const csurfInstance = csrf();
+app.use(function(req,res,next){
+  console.log("checking for csrf exclusion")
+  // exclude whatever url we want from CSRF protection
+  if (req.url === "/checkout/process_payment") {
+    return next();
+  }
+  csurfInstance(req,res,next);
+})
+
+
 app.use(function (err, req, res, next) {
   if (err && err.code == "EBADCSRFTOKEN") {
       req.flash('error_messages', 'The form has expired. Please try again');
@@ -64,7 +76,9 @@ app.use(function (err, req, res, next) {
 });
 // Share CSRF with hbs files
 app.use(function(req,res,next){
+  if(req.csrfToken) {
   res.locals.csrfToken = req.csrfToken();
+}
   next();
 })
 
@@ -89,6 +103,10 @@ async function main() {
 
 main();
 
-app.listen(3000, () => {
+// app.listen(3000, () => {
+//   console.log("Server has started");
+// });
+
+app.listen(3000, '0.0.0.0',function () {
   console.log("Server has started");
 });
