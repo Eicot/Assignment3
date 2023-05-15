@@ -204,7 +204,7 @@ router.post('/:poster_id/update', checkIfAuthenticated, async (req, res) => {
             let toRemove = existingTagIDs.filter( id => tagIds.includes(id) === false);
 
             await poster.tags().detach(toRemove);
-http://localhost:3000/posters/15/delete
+
             await poster.tags().attach(tagIds);
 
             req.flash("success_messages", `The Poster ${poster.get('title')} has been updated`)
@@ -214,7 +214,10 @@ http://localhost:3000/posters/15/delete
         'error':async (form) => {
             res.render('posters/update', {
                 'form':form.toHTML(bootstrapField),
-                'poster': poster.toJSON()
+                'poster': poster.toJSON(),
+                cloudinaryName: process.env.CLOUDINARY_NAME,
+                cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+                cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
             })
         }
     })

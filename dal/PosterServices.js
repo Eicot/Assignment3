@@ -4,6 +4,7 @@ const { Poster, MediaProperty, Tag } = require('../models');
 const getAllPosters = async() => {
     return await Poster.collection().fetch({
         withRelated: ['tags', 'mediaproperty']
+        
     })
 }
 
@@ -29,6 +30,7 @@ const searchPosters = async({title,mediapropertyId,minCost,maxCost,tags}) => {
         .query("join", "posters_tags", "posters.id", "poster_id")
         .where("tag_id", "in", tags.split(","));
     }
+    
 
     return await q.fetch({withRelated: ['tags']})
 }
