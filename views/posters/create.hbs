@@ -7,7 +7,7 @@
     {{{form}}}
     <div>
       <a href="#" class="btn btn-primary" id="upload_widget">Upload</a>
-      <img src="" style="display:none" id="uploaded_image"/>
+      <img src="" style="display:none" id="uploaded_image" class="std"/>
     </div>
     <input type="submit" value="Add Poster" class="btn btn-primary"/>
    
@@ -62,4 +62,11 @@ document.getElementById("upload_widget").addEventListener("click", function(){
 {{/block}}
 
 {{/extends}}
+
+<style>
+img.std {
+    height: 8rem;
+    width: 6rem;
+}
+</style>
 

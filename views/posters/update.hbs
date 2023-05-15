@@ -10,9 +10,9 @@
     </div>
     <div>     
         {{#if poster.image_url}}
-        <img src="{{poster.image_url}}" id="uploaded_image" />
+        <img src="{{poster.image_url}}" id="uploaded_image" class="std" />
         {{else}}
-        <img src="" style="display:none" id="uploaded_image" />
+        <img src="" style="display:none" id="uploaded_image" class="std" />
         {{/if}}
     </div>
 
@@ -65,3 +65,10 @@
 </script>
 
 {{/block}}
+
+<style>
+img.std {
+    height: 8rem;
+    width: 6rem;
+}
+</style>

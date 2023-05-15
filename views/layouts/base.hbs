@@ -31,36 +31,42 @@
 
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Navbar w/ text</a>
+    <a class="navbar-brand" href="#">Image</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarText">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
+          <a class="nav-link active" aria-current="page" href="/posters">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Features</a>
+          <a class="nav-link" href="/posters/create">Add New</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Pricing</a>
+          <a class="nav-link" href="/about-us">About Us</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/contact-us">Content Us</a>
         </li>
       </ul>
       <span class="navbar-text">
         {{#if user}}
-                    Hi, {{user.username}}
+                    Welcome back, <a href="/users/profile" class="ml-3 btn btn-primary btn-sm">{{user.username}}</a>
 
                     <a href="/users/logout" class="ml-3 btn btn-primary btn-sm">Logout</a>
+                    <a href="/cart" class="btn btn-success btn-sm">Cart</a>
 
                     {{else}}
-                    Hi, stranger
+                    
                     <a href="/users/login" class="ml-3 btn btn-primary btn-sm">Login</a>
+                    <a href="/users/register" class="ml-3 btn btn-primary btn-sm">Create Account</a>
                     {{/if}}
       </span>
     </div>
   </div>
 </nav>
+
 
         {{#block "content"}}{{/block}}
     </div>

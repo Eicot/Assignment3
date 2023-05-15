@@ -29,7 +29,7 @@ router.get('/', checkIfAuthenticated, async (req, res) => {
    
         }
         if (i.related('poster').get('image_url')) {
-             lineItem.price_data.poster_data.images = [ i.related('poster').get('image_url')];
+             lineItem.price_data.product_data.images = [ i.related('poster').get('image_url')];
         }
         lineItems.push(lineItem);
         // save the quantity data along with poster id
