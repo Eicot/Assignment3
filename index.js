@@ -1,4 +1,5 @@
 const express = require("express");
+
 const hbs = require("hbs");
 const wax = require("wax-on");
 const session = require('express-session');
@@ -9,15 +10,19 @@ const csrf = require('csurf');
 
 require("dotenv").config();
 
+
+
 // create an instance of express app
 let app = express();
+
+
 
 // set the view engine
 app.set("view engine", "hbs");
 
 // static folder
 app.use(express.static("public"));
-app.use(express.static("images"));
+
 
 // setup wax-on
 wax.on(hbs.handlebars);
@@ -107,10 +112,6 @@ async function main() {
 
 main();
 
-// app.listen(3000, () => {
-//   console.log("Server has started");
-// });
-
-app.listen(3000, '0.0.0.0',function () {
+app.listen(3000, () => {
   console.log("Server has started");
 });

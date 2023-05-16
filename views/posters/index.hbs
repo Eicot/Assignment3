@@ -4,7 +4,9 @@
 
 {{#block 'content'}}
 
+
 <form method="GET">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
     {{{searchForm}}}
     <input type="submit" class="mb-3 mt-3 btn btn-primary" value="Search"/>
 </form>

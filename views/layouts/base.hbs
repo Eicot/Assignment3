@@ -10,7 +10,10 @@
 
     <title>Poker Face - Poster Shop</title>
   </head>
+
+  
   <body>
+    <div>
     <div class=""container">
       {{#if success_messages }}        
             {{#each success_messages}}
@@ -31,7 +34,7 @@
 
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/posters"><img src="../../images/logo.jpg" width="100px" height="100px"/></a>
+    <a class="navbar-brand" href="/posters"><img src="logo.jpg" width="100px" height="100px"/></a>
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -82,6 +85,7 @@
         
 
         {{#block "content"}}{{/block}}
+    </div>
     </div>
     {{#block 'js'}}
         {{/block}}
