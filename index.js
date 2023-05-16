@@ -17,6 +17,7 @@ app.set("view engine", "hbs");
 
 // static folder
 app.use(express.static("public"));
+app.use(express.static("images"));
 
 // setup wax-on
 wax.on(hbs.handlebars);
