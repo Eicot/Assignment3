@@ -49,18 +49,19 @@ const createPosterForm = (allMediaProperties=[], allTags=[]) => {
                 label: ['form-label']
             }
         }),
-        'date': fields.string({
+        'date': fields.date({
             required: true,
             errorAfterField: true,
+            value: new Date().toISOString().split('T')[0],
             cssClasses: {
-                label: ['form-label']
+                label: ['form-label'],
             },
         }),
         'stock': fields.string({
             required: true,
             errorAfterField: true,
             cssClasses: {
-                label: ['form-label']
+                label: ['form-label'],
             },
             'validators':[validators.integer()]
         }),
@@ -168,6 +169,16 @@ const createSearchForm = (allMediaProperties=[], allTags=[]) => {
             'validators':[validators.integer()]
         }),
         'max_cost': fields.number({
+            required: false,
+            // widget: widgets.select(),
+            // choices: ['100', '200'],
+            'validators':[validators.integer()]
+        }),
+        'min_height': fields.number({
+            required: false,
+            'validators':[validators.integer()]
+        }),
+        'max_height': fields.number({
             required: false,
             // widget: widgets.select(),
             // choices: ['100', '200'],

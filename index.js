@@ -59,7 +59,7 @@ const csurfInstance = csrf();
 app.use(function(req,res,next){
   console.log("checking for csrf exclusion")
   // exclude whatever url we want from CSRF protection
-  if (req.url === "/checkout/process_payment") {
+  if (req.url === "/checkout/process_payment" || req.url.slice(0,5)=="/api/") {
     return next();
   }
   csurfInstance(req,res,next);
@@ -90,6 +90,9 @@ const userRoutes = require('./routes/users')
 const cloudinaryRoutes = require('./routes/cloudinary')
 const cartRoutes = require('./routes/shoppingCart')
 const checkoutRoutes = require('./routes/checkout')
+const api = {
+  posters: require('./routes/api/posters')
+}
 
 async function main() {
     app.use('/', landingRoutes);
@@ -98,7 +101,7 @@ async function main() {
     app.use('/cloudinary', cloudinaryRoutes);
     app.use('/cart', cartRoutes);
     app.use('/checkout', checkoutRoutes);
-  
+    app.use('/api/posters', express.json(), api.posters);
 }
 
 main();

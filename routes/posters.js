@@ -25,7 +25,9 @@ router.get('/', checkIfAuthenticated, async (req,res)=>{
 
     searchForm.handle(req, {
         'empty': async (form) => {
-            let posters = await posterServices.searchPosters({});
+            let posters = await posterServices.getAllPosters({});
+
+            
             res.render('posters/index', {
                 'posters': posters.toJSON(), 
                 'searchForm': form.toHTML(bootstrapField)
@@ -65,6 +67,8 @@ router.get('/', checkIfAuthenticated, async (req,res)=>{
             mediapropertyId: form.data.mediaproperty_id,
             minCost: form.data.min_cost,
             maxCost: form.data.max_cost,
+            minHeight: form.data.min_height,
+            maxHeight: form.data.max_height,
             tags: form.data.tags,
            })
         res.render('posters/index', {
@@ -162,7 +166,7 @@ router.get('/:poster_id/update', checkIfAuthenticated, async (req, res) => {
     posterForm.fields.title.value = poster.get('title');
     posterForm.fields.cost.value = poster.get('cost');
     posterForm.fields.description.value = poster.get('description');
-    posterForm.fields.date.value = poster.get('date');
+    posterForm.fields.date.value = new Date().toISOString().split('T')[0],
     posterForm.fields.stock.value = poster.get('stock');
     posterForm.fields.height.value = poster.get('height');
     posterForm.fields.width.value = poster.get('width');
@@ -189,9 +193,10 @@ router.post('/:poster_id/update', checkIfAuthenticated, async (req, res) => {
     const poster = await posterServices.getPosterByID(req.params.poster_id)
 
     const allMediaProperties = await posterServices.getAllMediaProperties();
+    const allTags = await posterServices.getAllTags();
 
     // process the form
-    const posterForm = createPosterForm(allMediaProperties);
+    const posterForm = createPosterForm(allMediaProperties, allTags);
     posterForm.handle(req, {
         'success':async(form) => {
             const {tags, ...posterData} = form.data;
@@ -212,6 +217,11 @@ router.post('/:poster_id/update', checkIfAuthenticated, async (req, res) => {
             
         },
         'error':async (form) => {
+
+            let selectedTags = await poster.related('tags').pluck('id')
+
+            posterForm.fields.tags.value = selectedTags;
+
             res.render('posters/update', {
                 'form':form.toHTML(bootstrapField),
                 'poster': poster.toJSON(),

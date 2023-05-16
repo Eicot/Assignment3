@@ -8,7 +8,7 @@ const getAllPosters = async() => {
     })
 }
 
-const searchPosters = async({title,mediapropertyId,minCost,maxCost,tags}) => {
+const searchPosters = async({title,mediapropertyId,minCost,maxCost,minHeight, maxHeight, tags}) => {
     const q = Poster.collection();
     if (title) {
         q.where('title', 'like', '%' + title + '%')
@@ -25,6 +25,14 @@ const searchPosters = async({title,mediapropertyId,minCost,maxCost,tags}) => {
    if (maxCost) {
        q.where('cost', '<=', maxCost);
    }
+
+   if (minHeight) {
+    q.where('height', '>=', minHeight)
+    }
+
+    if (maxHeight) {
+        q.where('height', '<=', maxHeight);
+    }
     if(tags) {
         q
         .query("join", "posters_tags", "posters.id", "poster_id")
@@ -72,6 +80,7 @@ const createPoster = async (
   
     // remember to save the newly created poster
     await poster.save();
+
   
     if (tags) {
       await poster.tags().attach(tags.split(","));
