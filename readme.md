@@ -29,3 +29,4 @@ FLUSH PRIVILEGES;
 * `csurf`
 * `cloudinary`
 * `dotenv`
+* `stripe`
