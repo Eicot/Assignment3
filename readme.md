@@ -321,49 +321,10 @@ CRUD stands for Create, Read, Update, and Delete, which are the basic functions 
 
 <!-- Project Setup -->
 ## Project setup
-```
-yarn install
-```
-
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
-
-Please ensure to run the separate Back-End Server to run the webpage. The link is available [here](https://github.com/Eicot/Assignment2/tree/main).
-
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-<!-- URLS -->
-[vuejs-url]: https://vuejs.org
-[mongodb-url]: https://www.mongodb.com
-[Axios-url]: https://axios-http.com
-[Bootstrap-url]:https://getbootstrap.com
-[Expressjs-url]: https://expressjs.com
-
-
-
-
-
 
 To start mysql, in the terminal, type in `mysql -u root`
 
-# Create a new database user
+### Create a new database user
 In the MySQL CLI:
 ```
 CREATE USER 'foo'@'%' IDENTIFIED WITH mysql_native_password BY 'bar';
@@ -390,7 +351,7 @@ npm run migrate start;
 ```
 
 
-## Dependencies
+### Installing Dependencies
 * `express`
 * `hbs`
 * `wax-on`
