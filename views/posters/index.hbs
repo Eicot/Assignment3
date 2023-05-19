@@ -17,7 +17,6 @@
     <thead>
         <tr>
             <th>Title</th>
-            <th>Media</th>
             <th>Tags</th>
             <th>Cost</th>
             <th>Description</th>
@@ -36,9 +35,6 @@
             
                 <td>
                     {{this.title}}
-                </td>
-                <td>
-                    {{this.mediaproperty.name}}
                 </td>
                 <td>
                     {{#each this.tags}}
@@ -92,5 +88,7 @@ img.std {
     height: 8rem;
     width: 6rem;
 }
+
+
 
 </style>

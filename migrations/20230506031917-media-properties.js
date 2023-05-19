@@ -14,13 +14,15 @@ exports.setup = function(options, seedLink) {
   seed = seedLink;
 };
 
-exports.up = function(db) {
-  return  db.createTable('media_properties',{
+exports.up = async function(db) {
+  await  db.createTable('media_properties',{
       id: { type: 'int', unsigned: true, primaryKey:true, autoIncrement:true},
       name: { type: 'string', length:100, notNull: true},
       description: 'text',
-      url: {type: 'string', length:1000, notNull: true }
   })
+  await db.insert('media_properties',['name'],['Star Wars']);
+  await db.insert('media_properties',['name'],['Marvel']);
+  await db.insert('media_properties',['name'],['DC']);
 };
 
 exports.down = function(db) {

@@ -14,11 +14,17 @@ exports.setup = function(options, seedLink) {
   seed = seedLink;
 };
 
-exports.up = function(db) {
-  return db.createTable('tags', {
+exports.up = async function(db) {
+  await db.createTable('tags', {
       id: { type: 'int', primaryKey:true, autoIncrement:true, unsigned:true},
       name: { type: 'string', length:100, notNull: true},
   })
+
+  await db.insert('tags',['name'],['colorful']);
+  await db.insert('tags',['name'],['simple']);
+  await db.insert('tags',['name'],['chill']);
+  await db.insert('tags',['name'],['fatasy']);
+  await db.insert('tags',['name'],['fan posters']);
 };
 
 exports.down = function(db) {

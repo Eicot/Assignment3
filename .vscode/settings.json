@@ -10,8 +10,8 @@
             "driver": "MySQL",
             "name": "mysql",
             "database": "mysql",
-            "username": "sqluser",
-            "password": "Password1@"
+            "username": "foo",
+            "password": "bar"
         }
     ]
 }
